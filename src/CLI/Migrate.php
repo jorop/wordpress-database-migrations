@@ -1,8 +1,8 @@
 <?php
 
-namespace DeliciousBrains\WPMigrations\CLI;
+namespace LudicDrive\WordpressDatabaseMigrations\CLI;
 
-class Migrate extends \WP_CLI_Command {
+class Command extends \WP_CLI_Command {
 
 	/**
 	 * Data migration command
@@ -24,7 +24,7 @@ class Migrate extends \WP_CLI_Command {
 	 * @throws \WP_CLI\ExitException
 	 */
 	public function __invoke( $args, $assoc_args ) {
-		$migrator = \DeliciousBrains\WPMigrations\Database\Migrator::instance();
+		$migrator = \LudicDrive\WordpressDatabaseMigrations\Database\Migrator::instance();
 
 		if ( isset( $assoc_args['setup'] ) ) {
 			if ( ! $migrator->setup() ) {
@@ -42,17 +42,17 @@ class Migrate extends \WP_CLI_Command {
 		}
 
 		$rollback = false;
-		if ( $migration && isset( $assoc_args['rollback'] ) ) {
-			// Can only rollback specific migration
+		if ( isset( $assoc_args['rollback'] ) ) {
 			$rollback = true;
 		}
 
 		$total = $migrator->run( $migration, $rollback );
-		if ( 0 == $total ) {
+		if ( 0 === $total ) {
 			\WP_CLI::warning( 'There are no migrations to run.' );
 		} else {
 			$action = $rollback ? 'rolled back' : 'run';
-			\WP_CLI::success( $total . ' migrations ' . $action );
+			/* translators: %s: Number of migrations. */
+			\WP_CLI::success( sprintf( _n( '%1$d migration %2$s.', '%1$d migrations %2$s.', $total, 'wdm' ), $total, $action ) );
 		}
 	}
 }

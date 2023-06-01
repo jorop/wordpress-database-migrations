@@ -1,26 +1,19 @@
 {
-  "name": "deliciousbrains/wp-migrations",
+  "name": "ludicdrive/wordpress-database-migrations",
   "description": "WordPress library for managing database table schema upgrades and data seeding",
   "license": "GPL-2.0-or-later",
   "authors": [
     {
-      "name": "Delicious Brains",
-      "email": "nom@deliciousbrains.com",
-      "homepage": "https://deliciousbrains.com/"
-    }
-  ],
-  "repositories": [
-    {
-      "type": "git",
-      "url": "https://github.com/polevaultweb/wp-eloquent/"
+      "name": "Josef Prenner",
+      "email": "office@ludicdrive.com",
+      "homepage": "https://ludicdrive.com"
     }
   ],
   "autoload": {
-    "psr-4": {
-      "DeliciousBrains\\WPMigrations\\": "src/"
-    }
+    "classmap": [ "src/cli", "src/database" ]
   },
   "require": {
-    "wp-cli/wp-cli": "^2.2.0"
+    "wp-cli/wp-cli-bundle": "^2.2.0",
+	  "php": ">=5.4"
   }
 }

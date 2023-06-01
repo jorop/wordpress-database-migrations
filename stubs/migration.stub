@@ -1,6 +1,6 @@
 <?php
 
-use DeliciousBrains\WPMigrations\Database\AbstractMigration;
+use LudicDrive\WordpressDatabaseMigrations\Database\AbstractMigration;
 
 class {{ class }} extends AbstractMigration {
 

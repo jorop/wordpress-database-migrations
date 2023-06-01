@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliciousBrains\WPMigrations\Database;
+namespace LudicDrive\WordpressDatabaseMigrations\Database;
 
 abstract class AbstractMigration {
 
@@ -22,5 +22,5 @@ abstract class AbstractMigration {
 	/**
 	 * @return mixed
 	 */
-	abstract function run();
+	abstract public function run();
 }

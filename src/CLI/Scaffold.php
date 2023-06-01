@@ -1,6 +1,6 @@
 <?php
 
-namespace DeliciousBrains\WPMigrations\CLI;
+namespace LudicDrive\WordpressDatabaseMigrations\CLI;
 
 class Scaffold extends \WP_CLI_Command {
 
@@ -27,7 +27,7 @@ class Scaffold extends \WP_CLI_Command {
 	 * @throws \WP_CLI\ExitException
 	 */
 	public function __invoke( $args, $assoc_args ) {
-        $migrator = \DeliciousBrains\WPMigrations\Database\Migrator::instance();
+        $migrator = \LudicDrive\WordpressDatabaseMigrations\Database\Migrator::instance();
 
         $migration = null;
         if ( ! empty( $args[0] ) ) {
