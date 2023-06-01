@@ -10,7 +10,7 @@
     }
   ],
   "autoload": {
-    "classmap": [ "src/cli", "src/database" ]
+    "classmap": [ "src/CLI", "src/Database" ]
   },
   "require": {
     "wp-cli/wp-cli-bundle": "^2.2.0",
