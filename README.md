@@ -8,7 +8,7 @@ This package is forked from [deliciousbrains/wp-migrations](https://github.com/d
 
 You create a new migration PHP file, add your schema update code, and optionally include a rollback method to reverse the change.
 
-Run `wp dbi migrate` on the command line using WP CLI and any migrations not already run will be executed.
+Run `wp wdm migrate` on the command line using WP CLI and any migrations not already run will be executed.
 
 The great thing about making database schema and data updates with migrations, is that the changes are file-based and therefore can be stored in version control, giving you better control when working across different branches.
 
@@ -18,7 +18,7 @@ This package is designed to be used on a WordPress site project, not for a plugi
 
 It needs to be running PHP 5.4 or higher.
 
-You need to have access to run WP CLI on the server. Typically `wp dbi migrate` will be run as a last stage build step in your deployment process.
+You need to have access to run WP CLI on the server. Typically `wp wdm migrate` will be run as a last stage build step in your deployment process.
 
 ### Key Differences from wp-migrations introduced by enhanced-wp-migrations
 
