@@ -1,6 +1,7 @@
 {
   "name": "ludicdrive/wordpress-database-migrations",
   "description": "WordPress library for managing database table schema upgrades and data seeding",
+  "type": "wp-cli-package",
   "license": "GPL-2.0-or-later",
   "authors": [
     {

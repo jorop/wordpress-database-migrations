@@ -2,9 +2,6 @@
 
 namespace LudicDrive\WordpressDatabaseMigrations\Database;
 
-use LudicDrive\WordpressDatabaseMigrations\CLI\Migrate;
-use LudicDrive\WordpressDatabaseMigrations\CLI\Scaffold;
-
 class Migrator {
 
 	/**
@@ -80,12 +77,7 @@ class Migrator {
 	protected function get_migrations( $exclude = [], $migration = null, $rollback = false ) {
 		$all_migrations = [];
 
-		$base_path = __FILE__;
-		while ( basename( $base_path ) !== 'vendor' ) {
-			$base_path = dirname( $base_path );
-		}
-
-		$path = apply_filters( 'wdm_wp_migrations_path', dirname( $base_path ) . '/app/migrations' );
+		$path = $this->get_migrations_path();
 		$migrations = glob( trailingslashit( $path ) . '*.php' );
 
 		if ( empty( $migrations ) ) {
@@ -119,6 +111,21 @@ class Migrator {
 		}
 
 		return $all_migrations;
+	}
+
+	/**
+	 * Get the default migrations folder path.
+	 *
+	 * @return string
+	 */
+	protected function get_migrations_path() {
+		$base_path = __FILE__;
+
+		while ( basename( $base_path ) != 'vendor' ) {
+			$base_path = dirname( $base_path );
+		}
+
+		return apply_filters( 'dbi_wp_migrations_path', dirname( $base_path ) . '/app/migrations' );
 	}
 
 	/**
@@ -262,7 +269,7 @@ class Migrator {
 		if ( ! file_put_contents( $file_path, $boilerplate ) ) {
 			return new \WP_Error(
 				'file_creation_error',
-				"Unable to create migration file {$migration_path}."
+				"Unable to create migration file {$migrations_path}."
 			);
 		}
 
