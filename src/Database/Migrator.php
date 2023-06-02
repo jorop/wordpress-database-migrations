@@ -2,6 +2,8 @@
 
 namespace LudicDrive\WordpressDatabaseMigrations\Database;
 
+use LudicDrive\WordpressDatabaseMigrations\CLI\Command;
+
 class Migrator {
 
 	/**
@@ -287,11 +289,5 @@ class Migrator {
 	 * As this class is a singleton it should not be clone-able
 	 */
 	protected function __clone() {
-	}
-
-	/**
-	 * As this class is a singleton it should not be able to be unserialized
-	 */
-	protected function __wakeup() {
 	}
 }
