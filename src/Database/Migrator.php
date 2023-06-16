@@ -119,13 +119,10 @@ class Migrator {
 	 * @return string
 	 */
 	protected function get_migrations_path() {
-		$base_path = __FILE__;
-
-		while ( basename( $base_path ) != 'vendor' ) {
-			$base_path = dirname( $base_path );
-		}
-
-		return apply_filters( 'dbi_wp_migrations_path', dirname( $base_path ) . '/app/migrations' );
+		
+		$migration_path = dirname( __FILE__ ) . '/app/migrations';
+		
+		return apply_filters( 'wdm_wp_migrations_path', $migration_path );
 	}
 
 	/**
@@ -163,14 +160,16 @@ class Migrator {
 			return $count;
 		}
 
+		\WP_CLI::log( 'Running ' . count($migrations) . ' Database Migrations' );
+
 		if ( $rollback ) {
 			$migrations = array_reverse( $migrations, true );
 		}
 
-		foreach ( $migrations as $file => $version ) {
+		foreach ( $migrations as $filename => $version ) {
 			$prev_classes = get_declared_classes();
 
-			include $file;
+			include $filename;
 
 			$diff = array_diff( get_declared_classes(), $prev_classes );
 			$migration_class = reset( $diff );
@@ -200,6 +199,7 @@ class Migrator {
 					'date_ran' => gmdate( 'Y-m-d H:i:s' ),
 				]
 			);
+			\WP_CLI::log( $count . ' / ' . count($migrations) . ' Database Migrations complete (' . $filename . ')' );
 		}
 
 		return $count;
@@ -251,7 +251,7 @@ class Migrator {
 		}
 
 		$stub_dir  = dirname( dirname( __DIR__ ) ) . '/stubs';
-		$stub_path = apply_filters( 'dbi_migration_stub_path', "{$stub_dir}/migration.stub" );
+		$stub_path = apply_filters( 'wdm_wp_migration_stub_path', "{$stub_dir}/migration.stub" );
 		$stub      = file_get_contents( $stub_path );
 
 		if ( ! $stub ) {
@@ -260,9 +260,19 @@ class Migrator {
 				"Unable to create migration file: Couldn't read from stub {$stub_path}."
 			);
 		}
-
-		$date        = date( 'Y_m_d' );
-		$filename    = "{$date}_{$migration_name}.php";
+		$migrations = get_migrations();
+		$version = '0.0.0';
+		
+		if( !empty($migrations) )
+		{
+			$last = end( $migrations );
+			$semver = explode( '.', $last );
+			if( count($semver) == 3 ) {
+				$semver[2] == $semver[2] + 1;
+			}
+			$version = implode( '.', $semver );
+		}
+		$filename    = "{$version}.php";
 		$file_path   = "{$migrations_path}/{$filename}";
 		$boilerplate = str_replace( '{{ class }}', $migration_name, $stub );
 
