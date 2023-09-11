@@ -81,8 +81,9 @@ class Migrator {
 
 		$path = $this->get_migrations_path();
 		$migrations = glob( trailingslashit( $path ) . '*.php' );
-
+		
 		if ( empty( $migrations ) ) {
+			\WP_CLI::warning( 'No migration files found in ' . $path );
 			return $all_migrations;
 		}
 
@@ -96,11 +97,13 @@ class Migrator {
 		foreach ( $migrations as $filename ) {
 			$version = basename( $filename, '.php' );
 			if ( ! $rollback && in_array( $version, $exclude, true ) ) {
+				\WP_CLI::log( 'Skip migration '.$version.' (already ran)' );
 				// The migration can't have been run before
 				continue;
 			}
 
 			if ( $rollback && ! in_array( $version, $exclude, true ) ) {
+				\WP_CLI::log( 'Skip migration '.$version.' (rolling back)' );
 				// As we are rolling back, it must have been run before
 				continue;
 			}
@@ -109,6 +112,7 @@ class Migrator {
 				continue;
 			}
 
+			\WP_CLI::log( 'Will run migration '.$version );
 			$all_migrations[ $filename ] = $version;
 		}
 
@@ -122,7 +126,9 @@ class Migrator {
 	 */
 	protected function get_migrations_path() {
 		
-		$migration_path = dirname( __FILE__ ) . '/app/migrations';
+		$dir_path = dirname(__FILE__);
+		$idx = strpos($dir_path, '/src/Database');
+		$migration_path = substr($dir_path, 0, $idx) . '/app/migrations';
 		
 		return apply_filters( 'wdm_wp_migrations_path', $migration_path );
 	}
@@ -139,7 +145,7 @@ class Migrator {
 		global $wpdb;
 		$table = $wpdb->prefix . $this->table_name;
 		$ran_migrations = $wpdb->get_col( "SELECT version from {$table}" );
-
+		\WP_CLI::warning( 'Ran Migrations: ' . count($ran_migrations) );
 		$migrations = $this->get_migrations( $ran_migrations, $migration, $rollback );
 
 		return $migrations;

@@ -28,7 +28,7 @@ class Command extends \WP_CLI_Command {
 
 		if ( isset( $assoc_args['setup'] ) ) {
 			if ( ! $migrator->setup() ) {
-				return \WP_CLI::warning( 'Migrations already setup' );
+				return \WP_CLI::warning( 'Migrations already setup dude!' );
 			}
 
 			\WP_CLI::success( 'Migrations setup' );
@@ -48,7 +48,7 @@ class Command extends \WP_CLI_Command {
 
 		$total = $migrator->run( $migration, $rollback );
 		if ( 0 === $total ) {
-			\WP_CLI::warning( 'There are no migrations to run.' );
+			\WP_CLI::warning( 'There are no migrations to run since last time' );
 		} else {
 			$action = $rollback ? 'rolled back' : 'run';
 			/* translators: %s: Number of migrations. */

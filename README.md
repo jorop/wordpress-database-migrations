@@ -38,9 +38,31 @@ You need to have access to run WP CLI on the server. Typically `wp wdm migrate` 
 - Bootstrap the package by adding `\LudicDrive\WordpressDatabaseMigrations\Database\Migrator::instance();` to an mu-plugin.
 - Run `wp wdm migrate --setup` on the server.
 
+#### mu-plugin
+
+For a mu-plugin, add a php file (e.g `wp-migrate.php`) in the `mu-plugins` directory in `wp-content`. The name of the file does not matter.  
+Minimal contents of the file:
+
+```php
+<?php
+
+// If this file is called directly, abort.
+if (!defined('WPINC')) {
+  die;
+}
+
+/**
+ * Instantiates the plugin and and initializes the functionality necessary for
+ * WordPress.
+ */
+require_once '<ABSOLUTE-PATH-TO>/wp-cli/.packages/vendor/autoload.php';
+$migrator = \LudicDrive\WordpressDatabaseMigrations\Database\Migrator::instance();
+```
+
+
 ### Migrations
 
-By default, the command will look for migration files in `/app/migrations` directory alongside the vendor folder. This can be altered with the filter `wdm_wp_migrations_path`.
+By default, the command will look for migration files in `/app/migrations` directory inside the package folder (in `wordpress-database-migrations`). This can be altered with the filter `wdm_wp_migrations_path`.
 
 An example migration to create a table would look like:
 
